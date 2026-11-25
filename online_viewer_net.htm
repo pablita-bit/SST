@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Interativo SST - DevSafe</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones limpos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        baby: {
+                            25: '#f7fbff',
+                            50: '#edf4ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        ice: {
+                            50: '#f4f8fb',
+                            100: '#e6edf4',
+                            200: '#cfe0ec',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full bg-gradient-to-br from-ice-50 via-baby-50 to-ice-100 text-slate-700 font-sans antialiased flex flex-col justify-between selection:bg-baby-200 selection:text-baby-900">
+
+    <!-- Cabeçalho Institucional / Landing Header -->
+    <header class="bg-baby-25/90 backdrop-blur-md border-b border-baby-200 shadow-xs sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-baby-600 text-white flex items-center justify-center font-bold text-xl shadow-sm">
+                    <i class="fa-solid fa-shield-heart"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-800 text-base leading-tight">DevSafe SST</h1>
+                    <p class="text-xs text-baby-700 font-medium">Auditoria & Ergonomia • SENAI TI</p>
+                </div>
+            </div>
+            <!-- Navegação por Abas -->
+            <nav class="hidden md:flex space-x-1 bg-ice-100 p-1 rounded-xl border border-baby-200">
+                <button onclick="switchTab('home')" id="nav-home" class="px-4 py-2 text-sm font-medium rounded-lg transition text-baby-800 bg-white shadow-xs">
+                    <i class="fa-solid fa-house mr-2"></i>Início
+                </button>
+                <button onclick="switchTab('pausas')" id="nav-pausas" class="px-4 py-2 text-sm font-medium rounded-lg transition text-slate-600 hover:text-baby-800">
+                    <i class="fa-solid fa-clock-rotate-left mr-2"></i>Pausas 20-20-20
+                </button>
+                <button onclick="switchTab('checklist')" id="nav-checklist" class="px-4 py-2 text-sm font-medium rounded-lg transition text-slate-600 hover:text-baby-800">
+                    <i class="fa-solid fa-clipboard-check mr-2"></i>Checklist Home Office
+                </button>
+                <button onclick="switchTab('canal')" id="nav-canal" class="px-4 py-2 text-sm font-medium rounded-lg transition text-slate-600 hover:text-baby-800">
+                    <i class="fa-solid fa-bullhorn mr-2"></i>Canal CIPA
+                </button>
+            </nav>
+            <!-- Menu mobile botão -->
+            <div class="md:hidden flex items-center">
+                <button onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-700 hover:bg-baby-100">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Menu Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-baby-200 bg-baby-25 px-4 pt-2 pb-3 space-y-1">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-baby-100">Início</button>
+            <button onclick="switchTab('pausas'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-baby-100">Pausas 20-20-20</button>
+            <button onclick="switchTab('checklist'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-baby-100">Checklist Home Office</button>
+            <button onclick="switchTab('canal'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-baby-100">Canal CIPA</button>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ABA 1: INÍCIO / LANDING -->
+        <section id="tab-home" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="bg-baby-25 rounded-2xl border border-baby-200 p-8 sm:p-12 shadow-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="max-w-2xl space-y-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-baby-100 text-baby-800 border border-baby-200">
+                        <i class="fa-solid fa-circle-check mr-1.5"></i> Atividade Integradora • NR-01, NR-05, NR-10 e NR-17
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight">
+                        Saúde, Segurança e Ergonomia para Desenvolvedores de TI
+                    </h2>
+                    <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                        Plataforma interativa desenvolvida para mitigação de riscos ocupacionais invisíveis (Burnout, fadiga visual digital, LER/DORT e inadequação de postos de trabalho híbridos).
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <button onclick="switchTab('checklist')" class="px-6 py-3 bg-baby-600 hover:bg-baby-700 text-white font-medium rounded-xl shadow-xs transition flex items-center">
+                            Iniciar Autoavaliação <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </button>
+                        <button onclick="switchTab('pausas')" class="px-6 py-3 bg-ice-50 border border-baby-300 hover:bg-baby-100 text-baby-800 font-medium rounded-xl transition flex items-center">
+                            Calculadora 20-20-20 <i class="fa-solid fa-eye ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full md:w-80 bg-ice-50 p-6 rounded-2xl border border-baby-200 flex flex-col justify-center space-y-4 shadow-xs">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-baby-600 text-white shadow-xs flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-slate-800 text-sm">Cenário TechWeb Ltda.</h4>
+                            <p class="text-xs text-slate-500">6+ Não-conformidades mapeadas</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-normal">
+                        Falta de CIPA (32 func.), ausência de AEP, reflexos intensos de luz, sprints abusivos sem pausas e servidor na copa.
+                    </p>
+                    <div class="text-xs font-medium text-baby-800 bg-baby-100 p-3 rounded-xl border border-baby-200">
+                        Status de conformidade: <span class="text-amber-700 font-semibold">Crítico / Requer Ação</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulos Cards de Acesso Rápido -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div onclick="switchTab('pausas')" class="bg-baby-25 p-6 rounded-2xl border border-baby-200 shadow-xs hover:shadow-md transition cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-baby-100 text-baby-700 flex items-center justify-center text-xl mb-4 group-hover:scale-105 transition border border-baby-200">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-1">Pausas Ativas & Olhos</h3>
+                        <p class="text-slate-600 text-sm">Cronômetro interativo com a regra 20-20-20 e alertas NR-17 para fadiga visual e alongamentos.</p>
+                    </div>
+                    <span class="text-baby-700 text-sm font-semibold flex items-center">Acessar ferramenta <i class="fa-solid fa-chevron-right ml-1 text-xs"></i></span>
+                </div>
+
+                <div onclick="switchTab('checklist')" class="bg-baby-25 p-6 rounded-2xl border border-baby-200 shadow-xs hover:shadow-md transition cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-baby-100 text-baby-700 flex items-center justify-center text-xl mb-4 group-hover:scale-105 transition border border-baby-200">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-1">Checklist Home Office</h3>
+                        <p class="text-slate-600 text-sm">Autoavaliação ergonômica com pontuação de risco automática e plano de ação imediato.</p>
+                    </div>
+                    <span class="text-baby-700 text-sm font-semibold flex items-center">Acessar ferramenta <i class="fa-solid fa-chevron-right ml-1 text-xs"></i></span>
+                </div>
+
+                <div onclick="switchTab('canal')" class="bg-baby-25 p-6 rounded-2xl border border-baby-200 shadow-xs hover:shadow-md transition cursor-pointer group flex flex-col justify-between space-y-4">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-baby-100 text-baby-700 flex items-center justify-center text-xl mb-4 group-hover:scale-105 transition border border-baby-200">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-lg mb-1">Canal de Riscos CIPA</h3>
+                        <p class="text-slate-600 text-sm">Relato anônimo seguro de condições inseguras, sobrecarga mental e assédio (NR-05/NR-01).</p>
+                    </div>
+                    <span class="text-baby-700 text-sm font-semibold flex items-center">Acessar ferramenta <i class="fa-solid fa-chevron-right ml-1 text-xs"></i></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 2: CALCULADORA DE PAUSAS ATIVAS (20-20-20) -->
+        <section id="tab-pausas" class="hidden space-y-6">
+            <div class="bg-baby-25 rounded-2xl border border-baby-200 p-6 sm:p-8 shadow-sm">
+                <div class="max-w-3xl mx-auto text-center space-y-3 mb-8">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-baby-100 text-baby-800 border border-baby-200">
+                        <i class="fa-solid fa-eye mr-1.5"></i> Fadiga Visual Digital & NR-17
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Calculadora de Pausas Ativas (Regra 20-20-20)</h2>
+                    <p class="text-slate-600 text-sm sm:text-base">
+                        A cada 20 minutos de foco em telas, desvie o olhar para um objeto a pelo menos 20 pés (6 metros) de distância por 20 segundos. Isso relaxa a acomodação visual e previne a Síndrome do Visor do Computador.
+                    </p>
+                </div>
+
+                <!-- Cronômetro Card Principal -->
+                <div class="max-w-md mx-auto bg-ice-50 rounded-2xl p-6 sm:p-8 border border-baby-300 text-center space-y-6 shadow-sm">
+                    <div id="timer-status-badge" class="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-baby-100 text-baby-800 shadow-xs border border-baby-200">
+                        Pronto para iniciar
+                    </div>
+                    
+                    <div id="timer-display" class="text-6xl sm:text-7xl font-bold text-slate-800 tracking-tight font-mono">
+                        20:00
+                    </div>
+
+                    <p id="timer-instruction" class="text-sm text-slate-600 font-medium">
+                        Modo Foco Ativo: Trabalhe normalmente e mantenha sua postura.
+                    </p>
+
+                    <!-- Botões de Controle -->
+                    <div class="flex items-center justify-center space-x-3">
+                        <button onclick="startTimer()" id="btn-start" class="px-6 py-3 bg-baby-600 hover:bg-baby-700 text-white font-semibold rounded-xl shadow-xs transition flex items-center">
+                            <i class="fa-solid fa-play mr-2"></i> Iniciar
+                        </button>
+                        <button onclick="pauseTimer()" id="btn-pause" class="px-6 py-3 bg-white border border-baby-300 hover:bg-baby-100 text-slate-700 font-semibold rounded-xl transition hidden">
+                            <i class="fa-solid fa-pause mr-2"></i> Pausar
+                        </button>
+                        <button onclick="resetTimer()" class="px-6 py-3 bg-white border border-baby-300 hover:bg-baby-100 text-slate-700 font-semibold rounded-xl transition flex items-center">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Reiniciar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Orientações de Pausa NR-17 e Alongamento -->
+                <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-ice-50 p-5 rounded-xl border border-baby-200 space-y-3">
+                        <h4 class="font-semibold text-slate-800 flex items-center text-sm">
+                            <i class="fa-solid fa-person-walking mr-2 text-baby-700"></i> Alongamentos Recomendados (A cada 50 min)
+                        </h4>
+                        <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                            <li><strong>Pescoço:</strong> Incline suavemente a cabeça para os ombros, mantendo por 15 segundos cada lado.</li>
+                            <li><strong>Punhos e Mãos:</strong> Estenda o braço com a palma para frente e puxe os dedos para trás suavemente (previne LER/DORT).</li>
+                            <li><strong>Coluna:</strong> Levante-se, entrelace os dedos acima da cabeça e estique o tronco para cima.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-ice-50 p-5 rounded-xl border border-baby-200 space-y-3">
+                        <h4 class="font-semibold text-slate-800 flex items-center text-sm">
+                            <i class="fa-solid fa-laptop-code mr-2 text-baby-700"></i> Requisitos NR-17 para Terminais de Vídeo
+                        </h4>
+                        <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                            <li><strong>Iluminação:</strong> Evite janelas diretamente atrás ou à frente do monitor (elimine reflexos intensos na tela).</li>
+                            <li><strong>Mobiliário:</strong> Ajuste a altura da cadeira para que os pés fiquem totalmente apoiados no chão ou apoio.</li>
+                            <li><strong>Posição do Monitor:</strong> O topo da tela deve estar na altura dos olhos ou ligeiramente abaixo.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 3: CHECKLIST INTERATIVO DE HOME OFFICE -->
+        <section id="tab-checklist" class="hidden space-y-6">
+            <div class="bg-baby-25 rounded-2xl border border-baby-200 p-6 sm:p-8 shadow-sm">
+                <div class="max-w-3xl mx-auto text-center space-y-3 mb-8">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-baby-100 text-baby-800 border border-baby-200">
+                        <i class="fa-solid fa-house-laptop mr-1.5"></i> Autoavaliação Ergonômica (NR-1 e NR-17)
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Checklist Interativo de Posto de Trabalho</h2>
+                    <p class="text-slate-600 text-sm sm:text-base">
+                        Responda às questões abaixo sobre seu ambiente de trabalho (presencial ou home office). O sistema calculará seu índice de risco ergonômico e fornecerá diretrizes de correção.
+                    </p>
+                </div>
+
+                <!-- Formulário de Perguntas -->
+                <form id="checklist-form" onsubmit="calculateChecklist(event)" class="max-w-3xl mx-auto space-y-6">
+                    
+                    <div class="p-5 rounded-xl bg-ice-50 border border-baby-200 space-y-3">
+                        <label class="block font-semibold text-slate-800 text-sm">
+                            1. Altura da mesa e suporte de tela: Você utiliza notebook diretamente sobre mesa padrão (75cm) sem suporte de altura ou teclado externo?
+                        </label>
+                        <div class="flex space-x-6">
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p1" value="sim" class="mr-2 text-baby-600 focus:ring-baby-500"> Sim (Risco de flexão cervical)
+                            </label>
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p1" value="nao" checked class="mr-2 text-baby-600 focus:ring-baby-500"> Não (Uso suporte/monitor externo)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-ice-50 border border-baby-200 space-y-3">
+                        <label class="block font-semibold text-slate-800 text-sm">
+                            2. Iluminação e Reflexos: Há janelas ou fontes de luz intensas posicionadas diretamente atrás ou na frente do seu monitor gerando reflexos?
+                        </label>
+                        <div class="flex space-x-6">
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p2" value="sim" class="mr-2 text-baby-600 focus:ring-baby-500"> Sim (Fadiga visual constante)
+                            </label>
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p2" value="nao" checked class="mr-2 text-baby-600 focus:ring-baby-500"> Não (Iluminação lateral adequada / persianas)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-ice-50 border border-baby-200 space-y-3">
+                        <label class="block font-semibold text-slate-800 text-sm">
+                            3. Pausas e Jornada: Você realiza horas extras frequentes e pula as pausas recomendadas devido a prazos apertados de sprints?
+                        </label>
+                        <div class="flex space-x-6">
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p3" value="sim" class="mr-2 text-baby-600 focus:ring-baby-500"> Sim (Risco de Burnout / fadiga mental)
+                            </label>
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p3" value="nao" checked class="mr-2 text-baby-600 focus:ring-baby-500"> Não (Pausas regulares respeitadas)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-xl bg-ice-50 border border-baby-200 space-y-3">
+                        <label class="block font-semibold text-slate-800 text-sm">
+                            4. Apoio para Pés e Postura: Seus pés ficam totalmente apoiados no chão ou em suporte ajustável, com coxas em linha paralela ao solo?
+                        </label>
+                        <div class="flex space-x-6">
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p4" value="nao" class="mr-2 text-baby-600 focus:ring-baby-500"> Não (Pés suspensos ou pernas cruzadas)
+                            </label>
+                            <label class="flex items-center text-sm text-slate-700 cursor-pointer">
+                                <input type="radio" name="p4" value="sim" checked class="mr-2 text-baby-600 focus:ring-baby-500"> Sim (Postura correta de assento)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <button type="submit" class="px-8 py-3.5 bg-baby-600 hover:bg-baby-700 text-white font-semibold rounded-xl shadow-xs transition">
+                            <i class="fa-solid fa-calculator mr-2"></i> Calcular Pontuação de Risco
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Resultado do Checklist (Dinâmico) -->
+                <div id="checklist-result" class="hidden max-w-3xl mx-auto mt-8 p-6 rounded-2xl border transition-all">
+                    <!-- Preenchido via JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABA 4: CANAL DE COMUNICAÇÃO DE RISCOS (CIPA) -->
+        <section id="tab-canal" class="hidden space-y-6">
+            <div class="bg-baby-25 rounded-2xl border border-baby-200 p-6 sm:p-8 shadow-sm">
+                <div class="max-w-3xl mx-auto text-center space-y-3 mb-8">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-baby-100 text-baby-800 border border-baby-200">
+                        <i class="fa-solid fa-shield-halved mr-1.5"></i> Conformidade NR-05 / NR-01 (CIPA)
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-800">Canal de Comunicação de Riscos & CIPA</h2>
+                    <p class="text-slate-600 text-sm sm:text-base">
+                        Relate condições inseguras, sobrecarga mental, risco psicossocial ou prevenção ao assédio de forma totalmente confidencial e anônima para a comissão interna.
+                    </p>
+                </div>
+
+                <!-- Formulário Seguro -->
+                <form id="risk-form" onsubmit="submitRiskReport(event)" class="max-w-2xl mx-auto space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Tipo de Ocorrência / Risco</label>
+                        <select id="risk-type" class="w-full px-4 py-3 rounded-xl border border-baby-300 bg-ice-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-baby-400 text-sm">
+                            <option value="ergonomico">Risco Ergonômico (Mobiliário, DORT/LER, Postura)</option>
+                            <option value="psicossocial">Risco Psicossocial (Sobrecarga de Sprints, Burnout, Metas Abusivas)</option>
+                            <option value="fisico_ambiental">Condição Ambiental (Iluminação inadequada, ruídos, fiação exposta)</option>
+                            <option value="assedio">Prevenção ao Assédio e Respeito no Ambiente de Trabalho (NR-05)</option>
+                            <option value="outro">Outro Relato de Segurança</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Local ou Setor Afetado</label>
+                        <input type="text" id="risk-location" required placeholder="Ex: Sala de Desenvolvimento / Home Office / Servidor na Copa" class="w-full px-4 py-3 rounded-xl border border-baby-300 bg-ice-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-baby-400 text-sm">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Descrição Detalhada da Condição Insegura</label>
+                        <textarea id="risk-desc" rows="4" required placeholder="Descreva os fatos observados de maneira clara para análise da CIPA e equipe de SST..." class="w-full px-4 py-3 rounded-xl border border-baby-300 bg-ice-50 text-slate-700 focus:outline-none focus:ring-2 focus:ring-baby-400 text-sm"></textarea>
+                    </div>
+
+                    <div class="flex items-center space-x-3 bg-ice-50 p-4 rounded-xl border border-baby-200">
+                        <input type="checkbox" id="anonimo-check" checked class="w-4 h-4 text-baby-600 rounded border-baby-300 focus:ring-baby-500">
+                        <label for="anonimo-check" class="text-xs text-slate-600">
+                            <strong>Enviar anonimamente:</strong> Sua identidade será preservada rigorosamente conforme as diretrizes da CIPA e LGPD.
+                        </label>
+                    </div>
+
+                    <div class="text-center pt-2">
+                        <button type="submit" class="px-8 py-3.5 bg-baby-600 hover:bg-baby-700 text-white font-semibold rounded-xl shadow-xs transition">
+                            <i class="fa-solid fa-paper-plane mr-2"></i> Enviar Relato à CIPA
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Feedback de Envio -->
+                <div id="risk-success-box" class="hidden max-w-2xl mx-auto mt-8 p-6 bg-baby-100 border border-baby-300 rounded-2xl text-center space-y-3">
+                    <div class="w-12 h-12 bg-baby-600 text-white rounded-full flex items-center justify-center mx-auto text-xl shadow-xs">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="font-bold text-baby-900 text-lg">Relato Registrado com Sucesso!</h3>
+                    <p id="protocol-text" class="text-xs text-baby-800 font-mono"></p>
+                    <p class="text-xs text-slate-600">
+                        A CIPA e o departamento de SST receberam a notificação para averiguação técnica e plano de mitigação.
+                    </p>
+                    <button onclick="resetRiskForm()" class="px-4 py-2 bg-white border border-baby-300 text-baby-800 text-xs font-semibold rounded-lg hover:bg-baby-50 transition">
+                        Fazer Novo Relato
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Rodapé Minimalista -->
+    <footer class="bg-baby-25/80 border-t border-baby-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+            <p><strong>DevSafe SST</strong> • Projeto Integrador SENAI • Técnico em Informática para Internet</p>
+            <p>Atendendo rigorosamente às Normas Regulamentadoras NR-01, NR-05, NR-10 e NR-17.</p>
+        </div>
+    </footer>
+
+    <!-- Caixa de Diálogo / Modal Customizada (Substitui alert/confirm) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center hidden p-4">
+        <div class="bg-baby-25 rounded-2xl max-w-md w-full p-6 shadow-xl border border-baby-200 space-y-4 text-center">
+            <div id="modal-icon" class="w-12 h-12 rounded-full bg-baby-100 text-baby-700 flex items-center justify-center mx-auto text-xl border border-baby-200">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <h3 id="modal-title" class="font-bold text-slate-800 text-lg">Aviso importante</h3>
+            <p id="modal-message" class="text-sm text-slate-600"></p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-baby-600 hover:bg-baby-700 text-white font-semibold rounded-xl text-sm transition">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript da Aplicação -->
+    <script>
+        // Sistema de Abas
+        function switchTab(tabId) {
+            const tabs = ['home', 'pausas', 'checklist', 'canal'];
+            tabs.forEach(t => {
+                const section = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    section.classList.remove('hidden');
+                    if (navBtn) {
+                        navBtn.className = "px-4 py-2 text-sm font-medium rounded-lg transition text-baby-800 bg-white shadow-xs border border-baby-200";
+                    }
+                } else {
+                    section.classList.add('hidden');
+                    if (navBtn) {
+                        navBtn.className = "px-4 py-2 text-sm font-medium rounded-lg transition text-slate-600 hover:text-baby-800";
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Modal Customizado
+        function showCustomModal(title, message, iconClass = "fa-solid fa-bell") {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('modal-icon').innerHTML = `<i class="${iconClass}"></i>`;
+            document.getElementById('custom-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('custom-modal').classList.add('hidden');
+        }
+
+        // Cronômetro 20-20-20
+        let timerInterval = null;
+        let timeLeft = 20 * 60; // 20 minutos em segundos
+        let isFocusMode = true; // True = 20 min foco, False = 20 seg descanso
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer-display').innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (timerInterval) return;
+            document.getElementById('btn-start').classList.add('hidden');
+            document.getElementById('btn-pause').classList.remove('hidden');
+            
+            updateBadgeState();
+
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                } else {
+                    // Alterna entre ciclo de foco e descanso
+                    if (isFocusMode) {
+                        isFocusMode = false;
+                        timeLeft = 20; // 20 segundos olhando para longe
+                        showCustomModal("Hora da Pausa Visual!", "Desvie os olhos da tela e olhe para um objeto a 6 metros (20 pés) por 20 segundos. Respire fundo.", "fa-solid fa-eye");
+                        updateBadgeState();
+                    } else {
+                        isFocusMode = true;
+                        timeLeft = 20 * 60; // Volta para 20 min
+                        showCustomModal("Foco Retomado!", "Pausa concluída com sucesso! Retome suas atividades com postura ergonômica correta.", "fa-solid fa-laptop-code");
+                        updateBadgeState();
+                    }
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            document.getElementById('btn-start').classList.remove('hidden');
+            document.getElementById('btn-pause').classList.add('hidden');
+            document.getElementById('timer-status-badge').innerText = "Cronômetro Pausado";
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isFocusMode = true;
+            timeLeft = 20 * 60;
+            updateTimerDisplay();
+            document.getElementById('btn-start').classList.remove('hidden');
+            document.getElementById('btn-pause').classList.add('hidden');
+            updateBadgeState();
+        }
+
+        function updateBadgeState() {
+            const badge = document.getElementById('timer-status-badge');
+            const instruction = document.getElementById('timer-instruction');
+            if (isFocusMode) {
+                badge.innerText = "Modo Foco (20 min)";
+                badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-baby-100 text-baby-800 shadow-xs border border-baby-200";
+                instruction.innerText = "Trabalhe mantendo o monitor ajustado e a coluna ereta.";
+            } else {
+                badge.innerText = "Pausa Visual 20-20-20 (20s)";
+                badge.className = "inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-100 text-amber-800 shadow-xs border border-amber-200";
+                instruction.innerText = "Olhe para longe agora! Relaxe os olhos e os ombros.";
+            }
+        }
+
+        // Checklist de Home Office / Risco
+        function calculateChecklist(event) {
+            event.preventDefault();
+            const form = document.forms['checklist-form'];
+            let riskPoints = 0;
+
+            if (form.p1.value === 'sim') riskPoints += 3;
+            if (form.p2.value === 'sim') riskPoints += 2;
+            if (form.p3.value === 'sim') riskPoints += 3;
+            if (form.p4.value === 'no' || form.p4.value === 'nao') riskPoints += 2;
+
+            const resultBox = document.getElementById('checklist-result');
+            resultBox.classList.remove('hidden');
+
+            let level = "";
+            let colorClass = "";
+            let recommendations = "";
+
+            if (riskPoints <= 2) {
+                level = "Baixo Risco (Postura Adequada)";
+                colorClass = "bg-baby-100 border-baby-300 text-baby-900";
+                recommendations = "Parabéns! Seu posto está em conformidade com a NR-17. Mantenha as pausas regulares e o ajuste correto do mobiliário.";
+            } else if (riskPoints <= 5) {
+                level = "Risco Moderado (Atenção Necessária)";
+                colorClass = "bg-amber-50 border-amber-200 text-amber-900";
+                recommendations = "Identificamos pontos de melhoria ergonômica (como suporte de tela ou ajuste de iluminação). Recomendamos adquirir apoio para notebook e reorganizar a posição em relação às janelas.";
+            } else {
+                level = "Risco Crítico (Não Conformidade NR-17 / NR-01)";
+                colorClass = "bg-rose-50 border-rose-200 text-rose-900";
+                recommendations = "Alerta alto de sobrecarga e LER/DORT! Conforme o estudo de caso TechWeb, o uso de notebooks sem suporte por longas horas e iluminação inadequada exige correção imediata da empresa e adoção de mobiliário ergonômico.";
+            }
+
+            resultBox.className = `max-w-3xl mx-auto mt-8 p-6 rounded-2xl border ${colorClass} space-y-3`;
+            resultBox.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <h3 class="font-bold text-lg">Resultado da Autoavaliação</h3>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-white shadow-xs">${level}</span>
+                </div>
+                <p class="text-sm leading-relaxed">${recommendations}</p>
+                <div class="text-xs pt-2 opacity-80 font-mono">Pontuação de Risco Calculada: ${riskPoints}/10</div>
+            `;
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Canal CIPA
+        function submitRiskReport(event) {
+            event.preventDefault();
+            const type = document.getElementById('risk-type').value;
+            const location = document.getElementById('risk-location').value;
+            const desc = document.getElementById('risk-desc').value;
+            const isAnon = document.getElementById('anonimo-check').checked;
+
+            const protocol = 'CIPA-2026-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('protocol-text').innerText = `Protocolo de Registro: ${protocol} (${isAnon ? 'Anônimo' : 'Identificado'})`;
+            
+            document.getElementById('risk-form').classList.add('hidden');
+            document.getElementById('risk-success-box').classList.remove('hidden');
+        }
+
+        function resetRiskForm() {
+            document.getElementById('risk-form').reset();
+            document.getElementById('risk-form').classList.remove('hidden');
+            document.getElementById('risk-success-box').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
